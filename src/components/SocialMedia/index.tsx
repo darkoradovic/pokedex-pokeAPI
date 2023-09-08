@@ -16,11 +16,11 @@ export const SocialMedia = () => {
           <GithubLogo />
         </C.Link>
       </li>
-      <li>
+      {/*  <li>
         <C.Link href="https://t.me/carlosdancr">
           <TelegramLogo />
         </C.Link>
-      </li>
+      </li> */}
     </C.Container>
   );
 };
