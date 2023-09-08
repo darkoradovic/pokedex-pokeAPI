@@ -6,6 +6,9 @@ import { Footer } from "./components/Layout/Footer";
 import { PokemonModal } from "./components/PokemonModal";
 import { Pokemon } from "./types/Pokemon";
 import { fetchPokemonList } from "./api/fetchPokemonList";
+import { AuthModal } from "./components/AuthModal";
+import { auth, logout } from "./api/firebase/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const App = () => {
   const [modal, setModal] = useState(false);
@@ -17,7 +20,11 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [showPagination, setShowPagination] = useState(true);
   const [disabledButton, setDisabledButton] = useState(false);
+  const [authModal, setAuthModal] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
+  const [userData, setUserData] = useState(null);
+  const [user] = useAuthState(auth);
+  console.log(user);
 
   useEffect(() => {
     (async () => {
@@ -47,6 +54,7 @@ const App = () => {
         setLoading={setLoading}
         loading={loading}
       />
+      <button onClick={() => logout()}>out</button>
       <SearchBar
         setPokemonList={setPokemonList}
         pokemonAmount={pokemonAmount}
@@ -80,6 +88,7 @@ const App = () => {
       {pokemonData && modal && (
         <PokemonModal setModal={setModal} pokemonData={pokemonData} />
       )}
+      {authModal && <AuthModal setModal={setAuthModal} />}
     </>
   );
 };
