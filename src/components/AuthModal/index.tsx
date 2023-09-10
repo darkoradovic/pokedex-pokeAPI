@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Register } from "./Register";
 
 type PokemonModalProps = {
-  setModal: (value: boolean) => void;
+  setModal?: (value: boolean) => void;
 };
 
 type AuthTypeProps = {

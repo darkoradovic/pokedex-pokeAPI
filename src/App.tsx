@@ -7,7 +7,7 @@ import { PokemonModal } from "./components/PokemonModal";
 import { Pokemon } from "./types/Pokemon";
 import { fetchPokemonList } from "./api/fetchPokemonList";
 import { AuthModal } from "./components/AuthModal";
-import { auth, logout } from "./api/firebase/firebase";
+import { auth, getFavorites, logout } from "./api/firebase/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const App = () => {
@@ -22,9 +22,8 @@ const App = () => {
   const [disabledButton, setDisabledButton] = useState(false);
   const [authModal, setAuthModal] = useState(false);
   const searchBarRef = useRef<HTMLDivElement>(null);
-  const [userData, setUserData] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const [user] = useAuthState(auth);
-  console.log(user);
 
   useEffect(() => {
     (async () => {
@@ -33,6 +32,12 @@ const App = () => {
       setLoading(false);
     })();
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      getFavorites(user.email, setFavorites);
+    }
+  }, [user]);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -83,6 +88,9 @@ const App = () => {
         setShowPagination={setShowPagination}
         searchBarRef={searchBarRef}
         disabledButton={disabledButton}
+        setAuthModal={setAuthModal}
+        favorites={favorites}
+        setFavorites={setFavorites}
       />
       <Footer />
       {pokemonData && modal && (

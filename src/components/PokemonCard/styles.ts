@@ -121,16 +121,17 @@ export const PokemonWeight = styled.div`
 
 export const PokemonHeight = styled(PokemonWeight)``;
 
-export const MoreDetailsButton = styled.button<{ color: string }>`
+export const MoreDetailsButton = styled.button<{ color: string, footerType: string }>`
   width: calc(100% + 2px);
   height: 3rem;
   background: ${(props) => props.color};
-  border-radius: 0 0 1.5rem 1.5rem;
+  border-right: ${props => props.footerType === 'details' && '1px solid white'} ;
+  border-radius:${props => props.footerType === 'details' ? ' 0 0 0 1.5rem' : ' 0 0 1.5rem 0'};
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   line-height: 150%;
   font-weight: 700;
   color: #ffffff;
@@ -140,3 +141,8 @@ export const MoreDetailsButton = styled.button<{ color: string }>`
     height: 1.5rem;
   }
 `;
+
+export const CardFooter = styled.div`
+width:100% ;
+  display: flex;
+`

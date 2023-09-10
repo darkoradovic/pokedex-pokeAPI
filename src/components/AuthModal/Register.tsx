@@ -53,8 +53,10 @@ export const Register = ({ setAuthType, setModal }: RegisterProps) => {
         </button>
 
         <div className="register__switch">
-          Already have an account?{" "}
-          <span onClick={() => setAuthType("login")}>Login</span> now.
+          <p> Already have an account?</p>
+          <p>
+            <span onClick={() => setAuthType("login")}>Login</span> now.
+          </p>
         </div>
       </div>
     </div>
