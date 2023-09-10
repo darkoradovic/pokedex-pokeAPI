@@ -100,7 +100,7 @@ export const HeroSection = ({
             <C.CharizardImg>
               <img
                 src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${randomPokemon?.id}.png`}
-                alt="Imagem do Charizard"
+                alt="Pokemon image"
               />
             </C.CharizardImg>
           </C.Content>

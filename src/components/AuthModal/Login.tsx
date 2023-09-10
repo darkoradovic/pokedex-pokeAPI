@@ -15,7 +15,6 @@ export const Login = ({ setAuthType, setModal }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, loading, error] = useAuthState(auth);
-  console.log(user);
 
   const login = () => {
     if (!email) alert("Error");
@@ -42,15 +41,17 @@ export const Login = ({ setAuthType, setModal }: LoginProps) => {
         <button className="login__btn" onClick={() => login()}>
           Login
         </button>
-        <button className="login__btn login__google" onClick={signInWithGoogle}>
+        {/*  <button className="login__btn login__google" onClick={signInWithGoogle}>
           Login with Google
-        </button>
+        </button> */}
         <div>
           <button className="forgot_password">Forgot Password?</button>
         </div>
         <div className="register__switch">
-          Don't have an account?{" "}
-          <span onClick={() => setAuthType("register")}>Register</span> now.
+          <p>Don't have an account?</p>
+          <p>
+            <span onClick={() => setAuthType("register")}>Register</span> now.
+          </p>
         </div>
       </div>
     </div>

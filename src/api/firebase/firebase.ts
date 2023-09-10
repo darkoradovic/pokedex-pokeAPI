@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup ,createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
-import {query, getDocs, collection, where, addDoc, getFirestore} from 'firebase/firestore'
+import {query, getDocs, collection, where, addDoc, getFirestore, updateDoc, doc, getDoc} from 'firebase/firestore'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -79,10 +79,67 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
   const logout = () => {
     signOut(auth);
   };
+
+  const getFavorites = async(email: string, setFavorites: (value: []) => void)=>{
+    const q = query(collection(db, "users"), where("email", "==", email));
+  
+    const querySnapshot = await getDocs(q);
+    let docID = '';
+    let pokemonIds: any
+    querySnapshot.forEach((doc) => {
+    // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
+      docID = doc.id;
+      pokemonIds = doc.data().pokemonId
+    });
+    setFavorites(pokemonIds)
+  }
+
+  const addToFavorites = async(email: string, pokemonId:number, setFavorites: (value: []) => void)=>{
+    const q = query(collection(db, "users"), where("email", "==", email));
+
+    const querySnapshot = await getDocs(q);
+    let docID = '';
+    let d: any
+    querySnapshot.forEach((doc) => {
+    // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
+      docID = doc.id;
+      d = doc.data().pokemonId ? doc.data().pokemonId : []
+    });
+    const user = doc(db, "users", docID);
+    await updateDoc(user, {
+       pokemonId: [...d,pokemonId]
+    });
+
+    getFavorites(email,setFavorites)
+}
+
+const removeFavorites =async (email:string, pokemonId: number, setFavorites: (value: []) => void) => {
+  const q = query(collection(db, "users"), where("email", "==", email));
+
+  const querySnapshot = await getDocs(q);
+  let docID = '';
+  let d: any
+  querySnapshot.forEach((doc) => {
+  // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
+    docID = doc.id;
+    d = doc.data().pokemonId
+  });
+  const user = doc(db, "users", docID);
+  var filteredArray = d.filter((e: number) => e !== pokemonId);
+  await updateDoc(user, {
+     pokemonId: filteredArray
+  });
+  getFavorites(email, setFavorites)
+  
+}
+
   export {
     signInWithGoogle,
     logInWithEmailAndPassword,
     registerWithEmailAndPassword,
     sendPasswordReset,
     logout,
+    addToFavorites,
+    getFavorites,
+    removeFavorites
   };

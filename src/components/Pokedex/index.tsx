@@ -23,6 +23,9 @@ type PokedexProps = {
   setShowPagination: (value: boolean) => void;
   disabledButton: boolean;
   searchBarRef: React.MutableRefObject<HTMLDivElement>;
+  setAuthModal: (value: boolean) => void;
+  favorites: number[];
+  setFavorites: (value: number[]) => void;
 };
 
 export const Pokedex = (props: PokedexProps) => {
@@ -41,6 +44,9 @@ export const Pokedex = (props: PokedexProps) => {
                   pokemon={pokemon}
                   setModal={props.setModal}
                   setPokemonData={props.setPokemonData}
+                  setAuthModal={props.setAuthModal}
+                  favorites={props.favorites}
+                  setFavorites={props.setFavorites}
                 />
               ))}
             </C.PokemonList>
