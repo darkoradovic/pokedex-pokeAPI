@@ -4,6 +4,7 @@ import pokeballBackground from "../../assets/background-pokeball.svg";
 interface HeroProps{
   type?: string
   buttonType?: string
+  isFavoritePage?: boolean 
 }
 
 export const Container = styled.div<HeroProps>`
@@ -29,11 +30,12 @@ export const Container = styled.div<HeroProps>`
    'linear-gradient(180deg, #a1dcff 0%, #14a8ff 100%)'};
   position: relative;
   overflow: hidden;
+  background: ${props => props.isFavoritePage && '#060B28'} ;
 
   &::before,
   &::after {
     content: "";
-    display: block;
+    display: ${props => props.isFavoritePage ? 'none' : 'block'};
     width: 25rem;
     height: 25rem;
     background: url(${pokeballBackground}) no-repeat;

@@ -121,12 +121,12 @@ export const PokemonWeight = styled.div`
 
 export const PokemonHeight = styled(PokemonWeight)``;
 
-export const MoreDetailsButton = styled.button<{ color: string, footerType: string }>`
+export const MoreDetailsButton = styled.button<{ color: string, footerType: string, favoritePage?: boolean }>`
   width: calc(100% + 2px);
   height: 3rem;
   background: ${(props) => props.color};
   border-right: ${props => props.footerType === 'details' && '1px solid white'} ;
-  border-radius:${props => props.footerType === 'details' ? ' 0 0 0 1.5rem' : ' 0 0 1.5rem 0'};
+  border-radius:${props => props.footerType === 'details' ? ' 0 0 0 1.5rem' : props.footerType === 'details' && props.favoritePage ? ' 0 0 1.5rem 1.5rem' : ' 0 0 1.5rem 0'};
   display: flex;
   justify-content: center;
   align-items: center;

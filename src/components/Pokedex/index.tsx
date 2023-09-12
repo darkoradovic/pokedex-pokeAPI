@@ -8,24 +8,26 @@ import { Loading } from "../helper/Loading";
 import { Pokemon } from "../../types/Pokemon";
 
 type PokedexProps = {
-  setModal: (value: boolean) => void;
+  setModal?: (value: boolean) => void;
   setPokemonData: (data: Pokemon) => void;
-  pokemonList: Pokemon[];
-  setPokemonList: (data: Pokemon[]) => void;
-  pokemonAmount: number;
-  setPokemonAmount: (value: number) => void;
-  error: boolean;
+  pokemonList?: Pokemon[];
+  setPokemonList?: (data: Pokemon[]) => void;
+  pokemonAmount?: number;
+  setPokemonAmount?: (value: number) => void;
+  error?: boolean;
   loading: boolean;
   setLoading: (value: boolean) => void;
-  page: number;
-  setPage: (value: number) => void;
-  showPagination: boolean;
-  setShowPagination: (value: boolean) => void;
-  disabledButton: boolean;
-  searchBarRef: React.MutableRefObject<HTMLDivElement>;
-  setAuthModal: (value: boolean) => void;
-  favorites: number[];
-  setFavorites: (value: number[]) => void;
+  page?: number;
+  setPage?: (value: number) => void;
+  showPagination?: boolean;
+  setShowPagination?: (value: boolean) => void;
+  disabledButton?: boolean;
+  searchBarRef?: React.MutableRefObject<HTMLDivElement>;
+  setAuthModal?: (value: boolean) => void;
+  favorites?: number[];
+  setFavorites?: (value: number[]) => void;
+  favoritesPokemonList?: Pokemon[];
+  isFavoritePage?: boolean;
 };
 
 export const Pokedex = (props: PokedexProps) => {
@@ -38,20 +40,34 @@ export const Pokedex = (props: PokedexProps) => {
             <Loading />
           ) : (
             <C.PokemonList>
-              {props.pokemonList.map((pokemon) => (
-                <PokemonCard
-                  key={pokemon.id}
-                  pokemon={pokemon}
-                  setModal={props.setModal}
-                  setPokemonData={props.setPokemonData}
-                  setAuthModal={props.setAuthModal}
-                  favorites={props.favorites}
-                  setFavorites={props.setFavorites}
-                />
-              ))}
+              {props.isFavoritePage
+                ? props.favoritesPokemonList?.map((pokemon) => (
+                    <PokemonCard
+                      key={pokemon.id}
+                      pokemon={pokemon}
+                      setModal={props.setModal}
+                      setPokemonData={props.setPokemonData}
+                      setAuthModal={props.setAuthModal}
+                      favorites={props.favorites}
+                      setFavorites={props.setFavorites}
+                      isFavoritePage={props.isFavoritePage}
+                    />
+                  ))
+                : props.pokemonList?.map((pokemon) => (
+                    <PokemonCard
+                      key={pokemon.id}
+                      pokemon={pokemon}
+                      setModal={props.setModal}
+                      setPokemonData={props.setPokemonData}
+                      setAuthModal={props.setAuthModal}
+                      favorites={props.favorites}
+                      setFavorites={props.setFavorites}
+                    />
+                  ))}
             </C.PokemonList>
           )}
-          {props.pokemonList.length > 1 &&
+          {!props.isFavoritePage &&
+            props.pokemonList?.length > 1 &&
             props.loading === false &&
             props.showPagination === true && (
               <UsePagination
@@ -62,7 +78,8 @@ export const Pokedex = (props: PokedexProps) => {
                 setPage={props.setPage}
               />
             )}
-          {props.pokemonList.length > 1 &&
+          {!props.isFavoritePage &&
+            props.pokemonList?.length > 1 &&
             props.loading === false &&
             props.showPagination === false && (
               <C.ButtonContainer>

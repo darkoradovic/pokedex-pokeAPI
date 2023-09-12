@@ -44,15 +44,36 @@ const signInWithGoogle = async () => {
   }
 };
 
-const logInWithEmailAndPassword = async (email: string, password: string) => {
+const logInWithEmailAndPassword = async (email: string, password: string,setModal: (value: boolean) => void, setError: (value: string) => void) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      console.error(err);
+      setModal(false);
+    } catch (error: any) {
+      if(error.message === "Firebase: Error (auth/email-already-in-use).") {
+        
+          setError("Email already in use")
+      }
+      if(error.message === "Firebase: Error (auth/invalid-email).") {
+        
+        setError("Invalid email")
+    }
+    if(error.message === "Firebase: Error (auth/wrong-password).") {
+        
+      setError("Wrong password")
+  }
+  if(error.message === "Firebase: Error (auth/user-not-found).") {
+        
+    setError("User not found")
+}
+
+if(error.message === 'Firebase: Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later. (auth/too-many-requests).'){
+  setError('To many attempts, try again later')
+}
+      
     }
   };
 
-  const registerWithEmailAndPassword = async (name: string, email: string, password: string) => {
+  const registerWithEmailAndPassword = async (name: string, email: string, password: string, setModal: (value: boolean) => void, setError: (value: string) => void) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
@@ -62,8 +83,11 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
         authProvider: "local",
         email,
       });
-    } catch (err) {
-      console.error(err);
+    } catch (error: any) {
+      if(error.message === "Firebase: Error (auth/email-already-in-use).") {
+        
+        setError("Email already in use")
+    }
     }
   };
 
@@ -80,7 +104,7 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
     signOut(auth);
   };
 
-  const getFavorites = async(email: string, setFavorites: (value: []) => void)=>{
+  const getFavorites = async(email: string, setFavorites?: (value: []) => void)=>{
     const q = query(collection(db, "users"), where("email", "==", email));
   
     const querySnapshot = await getDocs(q);
@@ -89,12 +113,12 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
     querySnapshot.forEach((doc) => {
     // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
       docID = doc.id;
-      pokemonIds = doc.data().pokemonId
+      pokemonIds = doc.data().pokemonFavorites
     });
     setFavorites(pokemonIds)
   }
 
-  const addToFavorites = async(email: string, pokemonId:number, setFavorites: (value: []) => void)=>{
+  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any)=>{
     const q = query(collection(db, "users"), where("email", "==", email));
 
     const querySnapshot = await getDocs(q);
@@ -103,17 +127,25 @@ const logInWithEmailAndPassword = async (email: string, password: string) => {
     querySnapshot.forEach((doc) => {
     // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
       docID = doc.id;
-      d = doc.data().pokemonId ? doc.data().pokemonId : []
+      d = doc.data().pokemonFavorites ? doc.data().pokemonFavorites : []
     });
     const user = doc(db, "users", docID);
+    const data ={
+      id,
+      name,
+      types,
+      height,
+      weight,
+      stats
+    }
     await updateDoc(user, {
-       pokemonId: [...d,pokemonId]
+       pokemonFavorites: [...d,data]
     });
 
     getFavorites(email,setFavorites)
 }
 
-const removeFavorites =async (email:string, pokemonId: number, setFavorites: (value: []) => void) => {
+const removeFavorites =async (email:string, id: number, setFavorites: (value: []) => void) => {
   const q = query(collection(db, "users"), where("email", "==", email));
 
   const querySnapshot = await getDocs(q);
@@ -122,12 +154,12 @@ const removeFavorites =async (email:string, pokemonId: number, setFavorites: (va
   querySnapshot.forEach((doc) => {
   // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
     docID = doc.id;
-    d = doc.data().pokemonId
+    d = doc.data().pokemonFavorites
   });
   const user = doc(db, "users", docID);
-  var filteredArray = d.filter((e: number) => e !== pokemonId);
+  var filteredArray = d.filter((e: any) => e.id !== id);
   await updateDoc(user, {
-     pokemonId: filteredArray
+    pokemonFavorites: filteredArray
   });
   getFavorites(email, setFavorites)
   
