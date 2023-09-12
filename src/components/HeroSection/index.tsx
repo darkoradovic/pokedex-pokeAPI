@@ -1,11 +1,9 @@
 import * as C from "./styles";
 import { ReactComponent as BoltIcon } from "../../assets/icon-bolt.svg";
-import { ReactComponent as DividerIcon } from "../../assets/divider-fire.svg";
 import { Waves } from "../Waves";
 import { PokemonType } from "../PokemonType";
 import { Header } from "../Layout/Header";
 import { fetchPokemon, fetchPokemonDescription } from "../../api/fetchPokemon";
-import imgSrc from "../../assets/img-charizard-min.png";
 import { Pokemon } from "../../types/Pokemon";
 import { useEffect, useState } from "react";
 import { Loading } from "../helper/Loading";
@@ -15,6 +13,8 @@ type HeroSectionProps = {
   setPokemonData: (data: Pokemon) => void;
   setLoading: (event: boolean) => void;
   loading: boolean;
+  setAuthModal: (value: boolean) => void;
+  isFavoritePage?: boolean;
 };
 
 export const HeroSection = ({
@@ -22,6 +22,8 @@ export const HeroSection = ({
   setPokemonData,
   setLoading,
   loading,
+  setAuthModal,
+  isFavoritePage,
 }: HeroSectionProps) => {
   const [randomPokemon, setRandomPokemon] = useState<Pokemon>();
   const [description, setDescription] = useState("");
@@ -61,53 +63,58 @@ export const HeroSection = ({
   ).href;
 
   return (
-    <C.Container type={randomPokemon?.types[0].type.name}>
-      <Header />
+    <C.Container
+      type={randomPokemon?.types[0].type.name}
+      isFavoritePage={isFavoritePage}
+    >
+      <Header setAuthModal={setAuthModal} isFavoritePage={isFavoritePage} />
       {loading ? (
         <div className="main-container-loading">
           <Loading />
         </div>
       ) : (
-        <div className="main-container">
-          <C.Content>
-            <C.CharizardData>
-              <C.CharizardNumber>#{randomPokemon?.id}</C.CharizardNumber>
-              <C.CharizardTypes>
-                <PokemonType
-                  type={
-                    randomPokemon?.types
-                      ? randomPokemon?.types[0].type.name
-                      : "fire"
-                  }
-                  tabIndex={false}
+        !isFavoritePage && (
+          <div className="main-container">
+            <C.Content>
+              <C.CharizardData>
+                <C.CharizardNumber>#{randomPokemon?.id}</C.CharizardNumber>
+                <C.CharizardTypes>
+                  <PokemonType
+                    type={
+                      randomPokemon?.types
+                        ? randomPokemon?.types[0].type.name
+                        : "fire"
+                    }
+                    tabIndex={false}
+                  />
+                </C.CharizardTypes>
+                <C.CharizardName>{randomPokemon?.name}</C.CharizardName>
+                <C.CharizardDescription>{description}</C.CharizardDescription>
+                <C.MoreDetailsButton
+                  onClick={handleClick}
+                  buttonType={randomPokemon?.types[0].type.name}
+                >
+                  <BoltIcon />
+                  <p> More Details</p>
+                </C.MoreDetailsButton>
+              </C.CharizardData>
+
+              <C.Divider>
+                <img src={imgUrl} alt="type_icon" height={56} width={56} />
+              </C.Divider>
+
+              <C.CharizardImg>
+                <img
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${randomPokemon?.id}.png`}
+                  alt="Pokemon image"
                 />
-              </C.CharizardTypes>
-              <C.CharizardName>{randomPokemon?.name}</C.CharizardName>
-              <C.CharizardDescription>{description}</C.CharizardDescription>
-              <C.MoreDetailsButton
-                onClick={handleClick}
-                buttonType={randomPokemon?.types[0].type.name}
-              >
-                <BoltIcon />
-                <p> More Details</p>
-              </C.MoreDetailsButton>
-            </C.CharizardData>
-
-            <C.Divider>
-              <img src={imgUrl} alt="type_icon" height={56} width={56} />
-            </C.Divider>
-
-            <C.CharizardImg>
-              <img
-                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${randomPokemon?.id}.png`}
-                alt="Pokemon image"
-              />
-            </C.CharizardImg>
-          </C.Content>
-        </div>
+              </C.CharizardImg>
+            </C.Content>
+          </div>
+        )
       )}
 
-      <Waves />
+      {!isFavoritePage && <Waves />}
     </C.Container>
   );
 };

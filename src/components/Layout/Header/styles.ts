@@ -1,11 +1,12 @@
 import styled from "styled-components";
 
-export const Container = styled.header`
+export const Container = styled.header<{isFavoritePage?: boolean}>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 1rem;
   padding-top: 1.5rem;
+  padding-bottom: ${props => props.isFavoritePage && '1.5rem'};
 
   & > svg {
     width: 9.56rem;

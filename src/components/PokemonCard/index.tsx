@@ -23,14 +23,17 @@ type PokemonCardProps = {
   setAuthModal: (value: boolean) => void;
   favorites: number[];
   setFavorites: (value: number[]) => void;
+  isFavoritePage?: boolean;
 };
 
 export const PokemonCard = (props: PokemonCardProps) => {
   const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${props.pokemon.id}.png`;
   const [user] = useAuthState(auth);
 
-  const filteredFavorites = props.favorites?.filter(
-    (item, index) => props.favorites.indexOf(item) === index
+  const ids = props.favorites?.map(({ id }: any) => id);
+
+  const filteredFavorites = ids?.filter(
+    (item, index) => ids.indexOf(item) === index
   );
 
   const [{ color }] = pokemonTypes.filter(
@@ -43,11 +46,27 @@ export const PokemonCard = (props: PokemonCardProps) => {
     props.setModal(true);
   };
 
-  const handleFavorite = async (id: number) => {
+  const handleFavorite = async (
+    id: number,
+    name: string,
+    types: any,
+    height: number,
+    weight: number,
+    stats: any
+  ) => {
     if (!user) {
       props.setAuthModal(true);
     } else {
-      addToFavorites(user.email, id, props.setFavorites);
+      addToFavorites(
+        user.email,
+        id,
+        props.setFavorites,
+        name,
+        types,
+        height,
+        weight,
+        stats
+      );
     }
   };
 
@@ -91,6 +110,7 @@ export const PokemonCard = (props: PokemonCardProps) => {
           color={color}
           onClick={handleClick}
           footerType="details"
+          favoritePage={props.isFavoritePage}
         >
           <BoltIcon />
           More details
@@ -108,7 +128,16 @@ export const PokemonCard = (props: PokemonCardProps) => {
         ) : (
           <C.MoreDetailsButton
             color={color}
-            onClick={() => handleFavorite(props.pokemon.id)}
+            onClick={() =>
+              handleFavorite(
+                props.pokemon.id,
+                props.pokemon.name,
+                props.pokemon.types,
+                props.pokemon.height,
+                props.pokemon.weight,
+                props.pokemon.stats
+              )
+            }
             footerType="favorite"
           >
             <HeartIcon />

@@ -1,11 +1,5 @@
-import React from "react";
-import { useState, useEffect } from "react";
-import {
-  auth,
-  registerWithEmailAndPassword,
-  signInWithGoogle,
-} from "../../api/firebase/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState } from "react";
+import { registerWithEmailAndPassword } from "../../api/firebase/firebase";
 
 type RegisterProps = {
   setAuthType: (value: string) => void;
@@ -16,16 +10,25 @@ export const Register = ({ setAuthType, setModal }: RegisterProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [error, setError] = useState("");
 
   const register = () => {
     if (!name) alert("Please enter name");
-    registerWithEmailAndPassword(name, email, password).then(() =>
-      setModal(false)
-    );
+    registerWithEmailAndPassword(name, email, password, setModal, setError);
   };
   return (
     <div className="login">
+      {error !== "" && (
+        <p
+          style={{
+            textAlign: "center",
+            textDecoration: "underline",
+            marginBottom: "20px",
+          }}
+        >
+          {error}!
+        </p>
+      )}
       <div className="login__container">
         <input
           type="text"

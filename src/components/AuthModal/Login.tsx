@@ -1,10 +1,5 @@
-import { useState, useEffect } from "react";
-import {
-  auth,
-  logInWithEmailAndPassword,
-  signInWithGoogle,
-} from "../../api/firebase/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useState } from "react";
+import { logInWithEmailAndPassword } from "../../api/firebase/firebase";
 
 type LoginProps = {
   setAuthType: (value: string) => void;
@@ -14,15 +9,26 @@ type LoginProps = {
 export const Login = ({ setAuthType, setModal }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [user, loading, error] = useAuthState(auth);
+  const [error, setError] = useState("");
 
   const login = () => {
     if (!email) alert("Error");
-    logInWithEmailAndPassword(email, password).then(() => setModal(false));
+    logInWithEmailAndPassword(email, password, setModal, setError);
   };
 
   return (
     <div className="login">
+      {error !== "" && (
+        <p
+          style={{
+            textAlign: "center",
+            textDecoration: "underline",
+            marginBottom: "20px",
+          }}
+        >
+          {error}!
+        </p>
+      )}
       <div className="login__container">
         <input
           type="text"
