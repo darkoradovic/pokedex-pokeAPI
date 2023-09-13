@@ -6,6 +6,7 @@ import { fetchPokemonList } from "../api/fetchPokemonList";
 import { SearchBar } from "../components/SearchBar";
 import { Pokedex } from "../components/Pokedex";
 import { PokemonModal } from "../components/PokemonModal";
+import { AuthModal } from "../components/AuthModal";
 
 type Favorite = {
   isFavoritePage: boolean;
@@ -83,6 +84,7 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
       {pokemonData && modal && (
         <PokemonModal setModal={setModal} pokemonData={pokemonData} />
       )}
+      {authModal && <AuthModal setModal={setAuthModal} />}
     </>
   );
 };

@@ -2,10 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup ,createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import {query, getDocs, collection, where, addDoc, getFirestore, updateDoc, doc, getDoc} from 'firebase/firestore'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import dayjs from "dayjs";
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyD4ceO9pNawMaYID_j4n-WIcoUE2TXMayk",
     authDomain: "pokedex-f034e.firebaseapp.com",
@@ -136,7 +134,8 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
       types,
       height,
       weight,
-      stats
+      stats,
+      timestamp: dayjs().unix()
     }
     await updateDoc(user, {
        pokemonFavorites: [...d,data]
