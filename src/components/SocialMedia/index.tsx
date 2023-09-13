@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ReactComponent as LinkedinLogo } from "../../assets/logo-linkedin.svg";
 import { ReactComponent as GithubLogo } from "../../assets/logo-github.svg";
 import { ReactComponent as TelegramLogo } from "../../assets/logo-telegram.svg";
-import { ReactComponent as AvatarLogout } from "../../assets/avatar.svg";
+import { ReactComponent as AvatarLogout } from "../../assets/icon-avatar.svg";
 import { ReactComponent as AvatarLogin } from "../../assets/pokeball.svg";
 import { ReactComponent as Logout } from "../../assets/logout.svg";
 import { ReactComponent as HeartIcon } from "../../assets/icon-heart-black.svg";
@@ -15,7 +15,7 @@ import Popover from "@mui/material/Popover";
 import { useState } from "react";
 
 type Props = {
-  setAuthModal: (value: boolean) => void;
+  setAuthModal?: (value: boolean) => void;
   header?: boolean;
 };
 
@@ -42,7 +42,7 @@ export const SocialMedia = ({ setAuthModal, header }: Props) => {
             <C.Avatar>
               {user ? (
                 <Button onClick={handleClick}>
-                  <AvatarLogout />
+                  <AvatarLogout style={{ width: "3rem" }} />
                 </Button>
               ) : (
                 <Tooltip title="Login">

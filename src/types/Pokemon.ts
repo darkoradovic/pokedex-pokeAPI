@@ -6,4 +6,5 @@ export type Pokemon = {
   height: number;
   stats: [{ base_stat: number; stat: { name: string } }];
   flavor_text_entries?: any
+  timestamp?: number
 };
