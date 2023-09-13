@@ -15,7 +15,7 @@ import Popover from "@mui/material/Popover";
 import { useState } from "react";
 
 type Props = {
-  setAuthModal: (value: boolean) => void;
+  setAuthModal?: (value: boolean) => void;
   header?: boolean;
 };
 
