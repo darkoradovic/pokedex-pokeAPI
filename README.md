@@ -30,6 +30,7 @@ This Pokédex was made in ReactJS + TypeScript. Initially, the application's boi
 - [Styled Components](https://styled-components.com/)
 - [MUI](https://mui.com/pt/)
 - [PokéAPI](https://pokeapi.co/)
+- [Firebase](https://firebase.google.com/)
 
 ## 📊 Project status
 
