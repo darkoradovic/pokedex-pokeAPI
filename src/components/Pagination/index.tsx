@@ -22,7 +22,7 @@ export default function UsePagination(props: UsePaginationProps) {
   const max = paginationLimit;
   const ref = useRef<HTMLInputElement>(null);
 
-  useKeyDownHook(() => handleChange(null, value));
+  //useKeyDownHook(() => handleChange(null, value));
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(event.target.value);
