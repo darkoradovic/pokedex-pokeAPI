@@ -6,6 +6,8 @@ This Pokédex was made in ReactJS + TypeScript. Initially, the application's boi
 
 ## 💻 Project Features
 
+- Firebase register/login
+- Save favorite pokemons to your list
 - Option to search pokemon by name or ID
 - Filter pokemons by type
 - Pagination
@@ -18,6 +20,7 @@ This Pokédex was made in ReactJS + TypeScript. Initially, the application's boi
 
 - ReactJS
 - TypeScript
+- Firebase
 - Vite
 - Styled-components
 - MUI
