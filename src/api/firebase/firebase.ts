@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup ,createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import {query, getDocs, collection, where, addDoc, getFirestore, updateDoc, doc, getDoc} from 'firebase/firestore'
 import dayjs from "dayjs";
+import { Pokemon } from "../../types/Pokemon";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4ceO9pNawMaYID_j4n-WIcoUE2TXMayk",
@@ -116,16 +117,18 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     setFavorites(pokemonIds)
   }
 
-  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any)=>{
+  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setError: (error: string) => void)=>{
     const q = query(collection(db, "users"), where("email", "==", email));
 
     const querySnapshot = await getDocs(q);
     let docID = '';
     let d: any
+    let pokemonList:any
     querySnapshot.forEach((doc) => {
     // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
       docID = doc.id;
       d = doc.data().pokemonFavorites ? doc.data().pokemonFavorites : []
+      pokemonList = doc.data().pokemonFavorites.length
     });
     const user = doc(db, "users", docID);
     const data ={
@@ -137,9 +140,16 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
       stats,
       timestamp: dayjs().unix()
     }
-    await updateDoc(user, {
-       pokemonFavorites: [...d,data]
-    });
+    if(pokemonList <= 20){
+      await updateDoc(user, {
+        pokemonFavorites: [...d,data]
+     })
+    }else{
+      setError("You exceeded the favorites limit of 20")
+      setTimeout(() => {
+        setError("")
+      },3000)
+    }
 
     getFavorites(email,setFavorites)
 }

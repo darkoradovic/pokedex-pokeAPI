@@ -15,6 +15,7 @@ import {
   auth,
   removeFavorites,
 } from "../../api/firebase/firebase";
+import { useEffect, useState } from "react";
 
 type PokemonCardProps = {
   pokemon: Pokemon;
@@ -29,6 +30,7 @@ type PokemonCardProps = {
 export const PokemonCard = (props: PokemonCardProps) => {
   const imgUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${props.pokemon.id}.png`;
   const [user] = useAuthState(auth);
+  const [error, setError] = useState("");
 
   const ids = props.favorites?.map(({ id }: any) => id);
 
@@ -65,7 +67,8 @@ export const PokemonCard = (props: PokemonCardProps) => {
         types,
         height,
         weight,
-        stats
+        stats,
+        setError
       );
     }
   };
@@ -124,6 +127,10 @@ export const PokemonCard = (props: PokemonCardProps) => {
             footerType="favorite"
           >
             <HeartIconFull />
+          </C.MoreDetailsButton>
+        ) : error ? (
+          <C.MoreDetailsButton color={color} footerType="favorite">
+            {error}
           </C.MoreDetailsButton>
         ) : (
           <C.MoreDetailsButton

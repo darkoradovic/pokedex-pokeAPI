@@ -23,6 +23,7 @@ export const Container = styled.div`
   padding-top: 7rem;
   position: relative;
   animation: ${fadeDown} 0.8s;
+  justify-content: flex-end;
 `;
 
 export const CardOverlay = styled.div<{ color: string }>`

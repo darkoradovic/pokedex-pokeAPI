@@ -5,6 +5,7 @@ export const Pagination = styled.ul`
   justify-content: center;
   align-items: center;
   gap: 0.5rem;
+ 
 
   li:first-child {
     margin-right: 1rem;
@@ -13,6 +14,28 @@ export const Pagination = styled.ul`
   li:last-child {
     margin-left: 1rem;
   }
+
+  .page__search{
+    display: flex;
+    height: 40px;
+
+    .input__page__number{
+      height: 40px;
+    min-width: 60px;
+    background: none;
+    border: 0.13rem solid rgb(47, 90, 255);
+    border-radius: 0.5rem 0 0 0.5rem;
+    padding: 0.5rem;
+    font-family: Montserrat;
+    font-size: 1rem;
+    line-height: 150%;
+    font-weight: 400;
+    color: rgb(255, 255, 255);
+    outline: none;
+  }
+  }
+
+ 
 `;
 
 export const Button = styled.button<{
@@ -55,4 +78,16 @@ export const Ellipsis = styled.span`
   line-height: 1;
   font-weight: 700;
   color: #fff;
+`;
+
+export const SearchButton = styled.button`
+  width: 3.5rem;
+  height: 100%;
+  background: #2f5aff;
+  border-radius: 0 0.5rem 0.5rem 0;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
 `;

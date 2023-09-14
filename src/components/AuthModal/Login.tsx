@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { logInWithEmailAndPassword } from "../../api/firebase/firebase";
+import { useKeyDownHook, useKeyDownHookAuth } from "../../hooks/useKeyPress";
 
 type LoginProps = {
   setAuthType: (value: string) => void;
@@ -10,6 +11,8 @@ export const Login = ({ setAuthType, setModal }: LoginProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  //useKeyDownHookAuth(() => login());
 
   const login = () => {
     if (!email) alert("Error");

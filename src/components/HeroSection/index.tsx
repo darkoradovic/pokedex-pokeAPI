@@ -7,6 +7,7 @@ import { fetchPokemon, fetchPokemonDescription } from "../../api/fetchPokemon";
 import { Pokemon } from "../../types/Pokemon";
 import { useEffect, useState } from "react";
 import { Loading } from "../helper/Loading";
+import NoImage from "../../assets/no-image.svg";
 
 type HeroSectionProps = {
   setModal: (value: boolean) => void;
@@ -107,6 +108,10 @@ export const HeroSection = ({
                 <img
                   src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/${randomPokemon?.id}.png`}
                   alt="Pokemon image"
+                  onError={({ currentTarget }: any) => {
+                    currentTarget.onerror = null; // prevents looping
+                    currentTarget.src = NoImage;
+                  }}
                 />
               </C.CharizardImg>
             </C.Content>

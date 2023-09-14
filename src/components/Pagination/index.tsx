@@ -3,7 +3,10 @@ import usePagination from "@mui/material/usePagination";
 import { ReactComponent as LeftArrowIcon } from "../../assets/icon-arrow-left.svg";
 import { ReactComponent as RightArrowIcon } from "../../assets/icon-arrow-right.svg";
 import { Pokemon } from "../../types/Pokemon";
-import { fetchPokemonList } from "../../api/fetchPokemonList";
+import { fetchAllPokemon, fetchPokemonList } from "../../api/fetchPokemonList";
+import { useEffect, useRef, useState } from "react";
+import { ReactComponent as SearchIcon } from "../../assets/icon-search.svg";
+import { useKeyDownHook } from "../../hooks/useKeyPress";
 
 type UsePaginationProps = {
   setPokemonList: (data: Pokemon[]) => void;
@@ -14,9 +17,24 @@ type UsePaginationProps = {
 };
 
 export default function UsePagination(props: UsePaginationProps) {
+  const [paginationLimit, setPaginationLimit] = useState(0);
+  const [value, setValue] = useState(0);
+  const max = paginationLimit;
+  const ref = useRef<HTMLInputElement>(null);
+
+  useKeyDownHook(() => handleChange(null, value));
+
+  const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = parseInt(event.target.value);
+    if (newValue > max) {
+      setValue(max);
+    } else {
+      setValue(newValue == 0 ? 1 : newValue);
+    }
+  };
+
   const handleChange = async (e: React.ChangeEvent<unknown>, value: number) => {
     props.setPage(value);
-
     props.setLoading(true);
     props.setPokemonList(await fetchPokemonList(value));
     props.setLoading(false);
@@ -26,8 +44,17 @@ export default function UsePagination(props: UsePaginationProps) {
     });
   };
 
+  useEffect(() => {
+    const getPaginationLimit = async () => {
+      const data = await fetchAllPokemon();
+      setPaginationLimit(data.length / 21);
+    };
+
+    getPaginationLimit();
+  }, []);
+
   const { items } = usePagination({
-    count: 10,
+    count: paginationLimit,
     siblingCount: 0,
     page: props.page,
     onChange: handleChange,
@@ -57,6 +84,20 @@ export default function UsePagination(props: UsePaginationProps) {
 
           return <li key={index}>{children}</li>;
         })}
+        <div className="page__search">
+          <input
+            ref={ref}
+            type="number"
+            className="input__page__number"
+            min="1"
+            max={max}
+            defaultValue={props.page}
+            onChange={(e) => handleChangeValue(e)}
+          />
+          <C.SearchButton onClick={(e) => handleChange(e, value)}>
+            <SearchIcon />
+          </C.SearchButton>
+        </div>
       </C.Pagination>
     </nav>
   );
