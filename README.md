@@ -25,7 +25,7 @@ This Pokédex was made in ReactJS + TypeScript. Initially, the application's boi
 
 ## 📌 Links
 
-- [Deploy](https://pokedex-react-carlosdancr.vercel.app/)
+- [Deploy](https://pokemoncre.netlify.app/)
 - [Vite](https://vitejs.dev/)
 - [Styled Components](https://styled-components.com/)
 - [MUI](https://mui.com/pt/)
