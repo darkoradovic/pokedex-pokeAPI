@@ -8,6 +8,7 @@ import { Pokemon } from "../../types/Pokemon";
 import { useEffect, useState } from "react";
 import { Loading } from "../helper/Loading";
 import NoImage from "../../assets/no-image.svg";
+import { useLocation } from "react-router-dom";
 
 type HeroSectionProps = {
   setModal: (value: boolean) => void;
@@ -28,6 +29,7 @@ export const HeroSection = ({
 }: HeroSectionProps) => {
   const [randomPokemon, setRandomPokemon] = useState<Pokemon>();
   const [description, setDescription] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
     const fetchRandomPokemon = async () => {
@@ -67,6 +69,7 @@ export const HeroSection = ({
     <C.Container
       type={randomPokemon?.types[0].type.name}
       isFavoritePage={isFavoritePage}
+      isSuccessPage={location.pathname}
     >
       <Header setAuthModal={setAuthModal} isFavoritePage={isFavoritePage} />
       {loading ? (

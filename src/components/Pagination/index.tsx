@@ -18,7 +18,7 @@ type UsePaginationProps = {
 
 export default function UsePagination(props: UsePaginationProps) {
   const [paginationLimit, setPaginationLimit] = useState(0);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
   const max = paginationLimit;
   const ref = useRef<HTMLInputElement>(null);
 
