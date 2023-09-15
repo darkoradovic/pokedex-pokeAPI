@@ -92,6 +92,7 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
         authProvider: "local",
         email,
         subscription: !subscription ? 'free' : subscription,
+        limit: 20,
         pokemonFavorites: []
       });
       setModal(false);
@@ -129,18 +130,20 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     setFavorites(pokemonIds)
   }
 
-  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setError: (event: string) => void )=>{
+  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setStripeModal: (event: boolean) => void)=>{
     const q = query(collection(db, "users"), where("email", "==", email));
 
     const querySnapshot = await getDocs(q);
     let docID = '';
     let d: any
     let pokemonList:any
+    let subscription: string
     querySnapshot.forEach((doc) => {
     // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
       docID = doc.id;
       d = doc.data().pokemonFavorites ? doc.data().pokemonFavorites : []
       pokemonList = doc.data().pokemonFavorites.length
+      subscription = doc.data().subscription
     });
     const user = doc(db, "users", docID);
     const data ={
@@ -152,21 +155,26 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
       stats,
       timestamp: dayjs().unix()
     }
-    if(pokemonList <= 19){
+    if(pokemonList <= 19 && subscription === 'free' ){
       await updateDoc(user, {
         pokemonFavorites: [...d,data]
      })
-    }else{
-      setError("You exceeded the favorites limit of 20")
-      setTimeout(() => {
-        setError("")
-      },3000)
+    }else if(pokemonList <= 20 && subscription === 'basic'){
+      await updateDoc(user, {
+        pokemonFavorites: [...d,data]
+     })
+    }else if( subscription === 'premium'){
+      await updateDoc(user, {
+        pokemonFavorites: [...d,data]
+     })
+    } else{
+      setStripeModal(true)
     }
 
     getFavorites(email,setFavorites)
 }
 
-const updateSubsriptionPlan = async(email: string, subscription: string)=>{
+const updateSubsriptionPlan = async(email: string, subscription: string, limit: number)=>{
   const q = query(collection(db, "users"), where("email", "==", email));
 
   const querySnapshot = await getDocs(q);
@@ -178,7 +186,8 @@ const updateSubsriptionPlan = async(email: string, subscription: string)=>{
   const user = doc(db, "users", docID);
   
     await updateDoc(user, {
-      subscription: subscription
+      subscription: subscription,
+      limit: limit
    })
  
 }

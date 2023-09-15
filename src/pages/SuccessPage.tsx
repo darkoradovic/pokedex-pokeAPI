@@ -10,7 +10,11 @@ export const SuccessPage = () => {
   useEffect(() => {
     const subscription = JSON.parse(localStorage.getItem("subscription"));
     subscription &&
-      updateSubsriptionPlan(subscription.email, subscription.plan);
+      updateSubsriptionPlan(
+        subscription.email,
+        subscription.plan,
+        subscription.limit
+      );
     setTimeout(() => {
       navigate("/");
     }, 5000);

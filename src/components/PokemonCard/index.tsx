@@ -25,6 +25,7 @@ type PokemonCardProps = {
   favorites: number[];
   setFavorites: (value: number[]) => void;
   isFavoritePage?: boolean;
+  setStripeModal?: (event: boolean) => void;
 };
 
 export const PokemonCard = (props: PokemonCardProps) => {
@@ -68,7 +69,7 @@ export const PokemonCard = (props: PokemonCardProps) => {
         height,
         weight,
         stats,
-        setError
+        props.setStripeModal
       );
     }
   };

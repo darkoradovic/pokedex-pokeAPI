@@ -28,6 +28,7 @@ type PokedexProps = {
   setFavorites?: (value: number[]) => void;
   favoritesPokemonList?: Pokemon[];
   isFavoritePage?: boolean;
+  setStripeModal?: (event: boolean) => void;
 };
 
 export const Pokedex = (props: PokedexProps) => {
@@ -51,6 +52,7 @@ export const Pokedex = (props: PokedexProps) => {
                       favorites={props.favorites}
                       setFavorites={props.setFavorites}
                       isFavoritePage={props.isFavoritePage}
+                      setStripeModal={props.setStripeModal}
                     />
                   ))
                 : props.pokemonList?.map((pokemon) => (
@@ -62,6 +64,7 @@ export const Pokedex = (props: PokedexProps) => {
                       setAuthModal={props.setAuthModal}
                       favorites={props.favorites}
                       setFavorites={props.setFavorites}
+                      setStripeModal={props.setStripeModal}
                     />
                   ))}
             </C.PokemonList>
