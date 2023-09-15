@@ -8,6 +8,7 @@ import { Pokedex } from "../components/Pokedex";
 import { PokemonModal } from "../components/PokemonModal";
 import { AuthModal } from "../components/AuthModal";
 import { getStripe } from "../api/stripe/stripe";
+import { StripeModal } from "../components/AuthModal/Stripe";
 
 type Favorite = {
   isFavoritePage: boolean;
@@ -29,11 +30,16 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
   const [favorites, setFavorites] = useState([]);
   const [user] = useAuthState(auth);
   const [stripeError, setStripeError] = useState(null);
+  const [stripeModal, setStripeModal] = useState(false);
 
-  const redirectToCheckout = async (priceId: string, plan: string) => {
+  const redirectToCheckout = async (
+    priceId: string,
+    plan: string,
+    limit: number
+  ) => {
     localStorage.setItem(
       "subscription",
-      JSON.stringify({ plan, email: user.email })
+      JSON.stringify({ plan, email: user.email, limit: limit })
     );
     setLoading(true);
     console.log("redirectToCheckout");
@@ -74,10 +80,10 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
 
   return (
     <>
-      {/*   <button
+      <button
         type="submit"
         onClick={() =>
-          redirectToCheckout("price_1NqVRtJvPcU6RzVuwOF9WePe", "basic")
+          redirectToCheckout("price_1NqVRtJvPcU6RzVuwOF9WePe", "basic", 21)
         }
       >
         Basic
@@ -85,11 +91,11 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
       <button
         type="submit"
         onClick={() =>
-          redirectToCheckout("price_1NqE5XJvPcU6RzVuLkceV50c", "premium")
+          redirectToCheckout("price_1NqE5XJvPcU6RzVuLkceV50c", "premium", 1000)
         }
       >
         Premium
-      </button> */}
+      </button>
 
       <SearchBar
         setPokemonList={setPokemonList}
@@ -122,11 +128,13 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
         setAuthModal={setAuthModal}
         favorites={favorites}
         setFavorites={setFavorites}
+        setStripeModal={setStripeModal}
       />
       {pokemonData && modal && (
         <PokemonModal setModal={setModal} pokemonData={pokemonData} />
       )}
       {authModal && <AuthModal setModal={setAuthModal} />}
+      {stripeModal && <StripeModal setStripeModal={setStripeModal} />}
     </>
   );
 };
