@@ -5,7 +5,9 @@ import { PokemonModal } from "./components/PokemonModal";
 import { Pokemon } from "./types/Pokemon";
 import { AuthModal } from "./components/AuthModal";
 import { Routes, Route } from "react-router-dom";
-import { FavoritesPage, HomePage } from "./pages";
+import { FavoritesPage, HomePage, SuccessPage } from "./pages";
+import { Elements } from "@stripe/react-stripe-js";
+import { getStripe } from "./api/stripe/stripe";
 
 const App = () => {
   const [modal, setModal] = useState(false);
@@ -23,7 +25,7 @@ const App = () => {
   }, [modal]);
 
   return (
-    <>
+    <Elements stripe={getStripe()}>
       <HeroSection
         setModal={setModal}
         setPokemonData={setPokemonData}
@@ -51,6 +53,7 @@ const App = () => {
             />
           }
         />
+        <Route path="/success" element={<SuccessPage />} />
       </Routes>
 
       <Footer />
@@ -58,7 +61,7 @@ const App = () => {
         <PokemonModal setModal={setModal} pokemonData={pokemonData} />
       )}
       {authModal && <AuthModal setModal={setAuthModal} />}
-    </>
+    </Elements>
   );
 };
 

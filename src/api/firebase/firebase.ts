@@ -3,7 +3,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup ,createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import {query, getDocs, collection, where, addDoc, getFirestore, updateDoc, doc, getDoc} from 'firebase/firestore'
 import dayjs from "dayjs";
-import { Pokemon } from "../../types/Pokemon";
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4ceO9pNawMaYID_j4n-WIcoUE2TXMayk",
@@ -74,6 +73,17 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
 
   const registerWithEmailAndPassword = async (name: string, email: string, password: string, setModal: (value: boolean) => void, setError: (value: string) => void) => {
     try {
+      
+      let subscription
+      const q = query(collection(db, "users"), where("email", "==", email));
+
+      const querySnapshot = await getDocs(q);
+      let docID = '';
+      querySnapshot.forEach((doc) => {
+        docID = doc.id;
+        subscription = doc.data().subscription
+      });
+      
       const res = await createUserWithEmailAndPassword(auth, email, password);
       const user = res.user;
       await addDoc(collection(db, "users"), {
@@ -81,7 +91,10 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
         name,
         authProvider: "local",
         email,
+        subscription: !subscription ? 'free' : subscription,
+        pokemonFavorites: []
       });
+      setModal(false);
     } catch (error: any) {
       if(error.message === "Firebase: Error (auth/email-already-in-use).") {
         
@@ -110,14 +123,13 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     let docID = '';
     let pokemonIds: any
     querySnapshot.forEach((doc) => {
-    // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
       docID = doc.id;
       pokemonIds = doc.data().pokemonFavorites
     });
     setFavorites(pokemonIds)
   }
 
-  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setError: (error: string) => void)=>{
+  const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setError: (event: string) => void )=>{
     const q = query(collection(db, "users"), where("email", "==", email));
 
     const querySnapshot = await getDocs(q);
@@ -133,14 +145,14 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     const user = doc(db, "users", docID);
     const data ={
       id,
-      name,
+      name, 
       types,
       height,
       weight,
       stats,
       timestamp: dayjs().unix()
     }
-    if(pokemonList <= 20){
+    if(pokemonList <= 19){
       await updateDoc(user, {
         pokemonFavorites: [...d,data]
      })
@@ -152,6 +164,23 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     }
 
     getFavorites(email,setFavorites)
+}
+
+const updateSubsriptionPlan = async(email: string, subscription: string)=>{
+  const q = query(collection(db, "users"), where("email", "==", email));
+
+  const querySnapshot = await getDocs(q);
+  let docID = '';
+  querySnapshot.forEach((doc) => {
+  // if email is you primary key then only document will be fetched so it is safe to continue, this line will get the documentID of user so that we can update it
+    docID = doc.id;
+  });
+  const user = doc(db, "users", docID);
+  
+    await updateDoc(user, {
+      subscription: subscription
+   })
+ 
 }
 
 const removeFavorites =async (email:string, id: number, setFavorites: (value: []) => void) => {
@@ -182,5 +211,6 @@ const removeFavorites =async (email:string, id: number, setFavorites: (value: []
     logout,
     addToFavorites,
     getFavorites,
-    removeFavorites
+    removeFavorites,
+    updateSubsriptionPlan
   };

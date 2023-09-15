@@ -40,7 +40,7 @@ const modal = keyframes`
   }
 `;
 
-export const Modal = styled.div`
+export const Modal = styled.div<{modalType?: string}>`
   background: rgba(6, 11, 40, 0.15);
   backdrop-filter: blur(20px);
   border-radius: 1.5rem;
@@ -52,7 +52,7 @@ export const Modal = styled.div`
   transform: scale(0.8);
   animation: ${modal} 0.4s forwards;
   margin: ${() => (window.innerHeight < 650 ? "12.87rem 1rem 7rem" : "0")};
-  max-width: 300px;
+  max-width: ${'300px'};
   padding: 32px;
 
   @media (max-width: 62.5rem) {
@@ -62,7 +62,15 @@ export const Modal = styled.div`
   }
 
   .login{
-    max-width: calc(300px - 64px);
+    /* max-width: ${props => props.modalType === 'stripe' ? 'calc(350px - 64px)' : 'calc(300px - 64px)'};
+    display:  ${props => props.modalType === 'stripe' && 'flex'};
+    flex-direction:  ${props => props.modalType === 'stripe' && 'column'}; */
+    max-width: ${'calc(300px - 64px)'};
+
+    .subsribe{
+      margin-top: 32px;
+      width: 100%;
+    }
   }
 
   .login__container{

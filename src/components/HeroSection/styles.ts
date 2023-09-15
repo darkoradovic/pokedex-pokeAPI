@@ -4,10 +4,12 @@ import pokeballBackground from "../../assets/background-pokeball.svg";
 interface HeroProps{
   type?: string
   buttonType?: string
-  isFavoritePage?: boolean 
+  isFavoritePage?: boolean
+  isSuccessPage?: string 
 }
 
 export const Container = styled.div<HeroProps>`
+  display: ${props => props.isSuccessPage === '/success' && 'none'};
   // background: linear-gradient(180deg, #ee8328 0%, #e14318 100%);
   background: ${props => 
    props.type === 'bug' ? 'linear-gradient(180deg, #ceff86 0%, #7bcf00 100%)' :  

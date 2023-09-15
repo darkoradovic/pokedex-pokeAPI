@@ -15,7 +15,7 @@ import {
   auth,
   removeFavorites,
 } from "../../api/firebase/firebase";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type PokemonCardProps = {
   pokemon: Pokemon;
