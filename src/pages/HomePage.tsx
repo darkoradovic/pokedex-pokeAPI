@@ -29,35 +29,7 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
   const searchBarRef = useRef<HTMLDivElement>(null);
   const [favorites, setFavorites] = useState([]);
   const [user] = useAuthState(auth);
-  const [stripeError, setStripeError] = useState(null);
   const [stripeModal, setStripeModal] = useState(false);
-
-  const redirectToCheckout = async (
-    priceId: string,
-    plan: string,
-    limit: number
-  ) => {
-    localStorage.setItem(
-      "subscription",
-      JSON.stringify({ plan, email: user.email, limit: limit })
-    );
-    setLoading(true);
-    console.log("redirectToCheckout");
-
-    const stripe = await getStripe();
-    const { error } = await stripe.redirectToCheckout({
-      lineItems: [{ price: priceId, quantity: 1 }],
-      mode: "subscription",
-      successUrl: `${window.location.origin}/success`,
-      cancelUrl: `${window.location.origin}/`,
-    });
-    console.log("Stripe checkout error", error);
-
-    if (error) setStripeError(error.message);
-    setLoading(false);
-  };
-
-  if (stripeError) alert(stripeError);
 
   useEffect(() => {
     (async () => {
@@ -80,23 +52,6 @@ export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
 
   return (
     <>
-      <button
-        type="submit"
-        onClick={() =>
-          redirectToCheckout("price_1NqVRtJvPcU6RzVuwOF9WePe", "basic", 21)
-        }
-      >
-        Basic
-      </button>
-      <button
-        type="submit"
-        onClick={() =>
-          redirectToCheckout("price_1NqE5XJvPcU6RzVuLkceV50c", "premium", 1000)
-        }
-      >
-        Premium
-      </button>
-
       <SearchBar
         setPokemonList={setPokemonList}
         pokemonAmount={pokemonAmount}

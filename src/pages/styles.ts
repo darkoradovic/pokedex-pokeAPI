@@ -25,6 +25,20 @@ export const Container = styled.div`
     }
   }
 
+  .tabs{
+    display: flex;
+    gap: 32px;
+
+    & span{
+      cursor: pointer;
+    }
+
+    .active{
+      border-bottom: 2px solid white;
+      padding-bottom: 4px;
+    }
+  }
+
 `;
 
 export const Filters = styled.div`

@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import { FavoritesPage, HomePage, SuccessPage } from "./pages";
 import { Elements } from "@stripe/react-stripe-js";
 import { getStripe } from "./api/stripe/stripe";
+import { ProfilePage } from "./pages/ProfilePage";
 
 const App = () => {
   const [modal, setModal] = useState(false);
@@ -52,6 +53,10 @@ const App = () => {
               setIsFavoritePage={setIsFavoritePage}
             />
           }
+        />
+        <Route
+          path="/profile"
+          element={<ProfilePage setIsFavoritePage={setIsFavoritePage} />}
         />
         <Route path="/success" element={<SuccessPage />} />
       </Routes>

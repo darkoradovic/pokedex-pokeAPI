@@ -2,7 +2,9 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithEmailAndPassword, signOut, GoogleAuthProvider, signInWithPopup ,createUserWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import {query, getDocs, collection, where, addDoc, getFirestore, updateDoc, doc, getDoc} from 'firebase/firestore'
+import {getStorage} from 'firebase/storage'
 import dayjs from "dayjs";
+import {  toast } from 'react-toastify';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD4ceO9pNawMaYID_j4n-WIcoUE2TXMayk",
@@ -21,6 +23,7 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export default app;
 const db = getFirestore(app);
+const storage = getStorage(app);
 
 const googleProvider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
@@ -115,6 +118,8 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
 
   const logout = () => {
     signOut(auth);
+    window.location.href = '/'
+    localStorage.removeItem('user')
   };
 
   const getFavorites = async(email: string, setFavorites?: (value: []) => void)=>{
@@ -123,11 +128,29 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     const querySnapshot = await getDocs(q);
     let docID = '';
     let pokemonIds: any
+    let name = ''
+    let userEmail = ''
+    let avatar = ''
+    let birthday = ''
+    let subscription = ''
     querySnapshot.forEach((doc) => {
       docID = doc.id;
       pokemonIds = doc.data().pokemonFavorites
+      name = doc.data().name
+      userEmail = doc.data().email
+      avatar = doc.data().avatar
+      birthday = doc.data().birthday
+      subscription = doc.data().subscription
     });
-    setFavorites(pokemonIds)
+    const localData = {
+      name,
+      email: userEmail,
+      avatar,
+      birthday,
+      subscription
+    }
+    setFavorites && setFavorites(pokemonIds)
+    localStorage.setItem('user', JSON.stringify(localData))
   }
 
   const addToFavorites = async(email: string, id:number, setFavorites: (value: []) => void,  name: string, types: any, height: number, weight: number, stats: any, setStripeModal: (event: boolean) => void)=>{
@@ -212,6 +235,48 @@ const removeFavorites =async (email:string, id: number, setFavorites: (value: []
   
 }
 
+const updateProfile = async (email: string, name: string , updatedEmail: string, avatar: string, birthday: string, setUpdating: (value: boolean) => void) => {
+  const q = query(collection(db, "users"), where("email", "==", email));
+  setUpdating(true)
+  const querySnapshot = await getDocs(q);
+  let docID = '';
+  querySnapshot.forEach((doc) => {
+    docID = doc.id;
+  });
+  const user = doc(db, "users", docID);
+  
+   try {
+    await updateDoc(user, {
+      name: name,
+      email: updatedEmail,
+      avatar: avatar,
+      birthday: birthday
+   })
+   setUpdating(false)
+   toast.success('Profile successfully updated!', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+    });
+   } catch (error) {
+    toast.error('Profile not updated!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+   }
+}
+
   export {
     signInWithGoogle,
     logInWithEmailAndPassword,
@@ -221,5 +286,6 @@ const removeFavorites =async (email:string, id: number, setFavorites: (value: []
     addToFavorites,
     getFavorites,
     removeFavorites,
-    updateSubsriptionPlan
+    updateSubsriptionPlan,
+    updateProfile
   };
