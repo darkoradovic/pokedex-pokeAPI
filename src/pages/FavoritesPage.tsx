@@ -1,11 +1,12 @@
 import * as C from "./styles";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Pokedex } from "../components/Pokedex";
 import { Pokemon } from "../types/Pokemon";
 import { auth, getFavorites } from "../api/firebase/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { PokemonModal } from "../components/PokemonModal";
 import Button from "@mui/material/Button";
+import { PokemonContext } from "../context/pokemonContext";
 
 type Favorite = {
   isFavoritePage: boolean;
@@ -16,10 +17,16 @@ export const FavoritesPage = ({
   setIsFavoritePage,
   isFavoritePage,
 }: Favorite) => {
-  const [modal, setModal] = useState(false);
-  const [pokemonData, setPokemonData] = useState<Pokemon>();
-  const [loading, setLoading] = useState(false);
-  const [favorites, setFavorites] = useState<any>([]); //set any becouse of different data structure
+  const {
+    pokemonData,
+    setPokemonData,
+    loading,
+    setLoading,
+    modal,
+    setModal,
+    favorites,
+    setFavorites,
+  } = useContext(PokemonContext);
   const [user] = useAuthState(auth);
   const [activeSort, setActiveSort] = useState("date");
   let sorted: Pokemon[];

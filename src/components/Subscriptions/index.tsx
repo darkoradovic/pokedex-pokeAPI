@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import * as C from "./styles";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../api/firebase/firebase";
 import { getStripe } from "../../api/stripe/stripe";
+import { UserContext } from "../../context/userContext";
 
 export const Subscriptions = () => {
   const [user] = useAuthState(auth);
   const [stripeError, setStripeError] = useState(null);
   const [stripeModal, setStripeModal] = useState(false);
 
-  const plan = JSON.parse(localStorage.getItem("user")).subscription;
+  const { subscription: plan } = useContext(UserContext);
 
   const redirectToCheckout = async (
     priceId: string,

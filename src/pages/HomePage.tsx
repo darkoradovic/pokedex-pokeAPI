@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Pokemon } from "../types/Pokemon";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth, getFavorites } from "../api/firebase/firebase";
@@ -9,6 +9,8 @@ import { PokemonModal } from "../components/PokemonModal";
 import { AuthModal } from "../components/AuthModal";
 import { getStripe } from "../api/stripe/stripe";
 import { StripeModal } from "../components/AuthModal/Stripe";
+import { PokemonContext } from "../context/pokemonContext";
+import { UserContext } from "../context/userContext";
 
 type Favorite = {
   isFavoritePage: boolean;
@@ -16,20 +18,33 @@ type Favorite = {
 };
 
 export const HomePage = ({ setIsFavoritePage, isFavoritePage }: Favorite) => {
-  const [modal, setModal] = useState(false);
-  const [pokemonData, setPokemonData] = useState<Pokemon>();
-  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
-  const [pokemonAmount, setPokemonAmount] = useState(21);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [showPagination, setShowPagination] = useState(true);
-  const [disabledButton, setDisabledButton] = useState(false);
-  const [authModal, setAuthModal] = useState(false);
+  const {
+    pokemonData,
+    setPokemonData,
+    pokemonList,
+    setPokemonList,
+    pokemonAmount,
+    setPokemonAmount,
+    error,
+    setError,
+    loading,
+    setLoading,
+    page,
+    setPage,
+    modal,
+    setModal,
+    showPagination,
+    setShowPagination,
+    disabledButton,
+    setDisabledButton,
+    authModal,
+    setAuthModal,
+    favorites,
+    setFavorites,
+  } = useContext(PokemonContext);
+  const { stripeModal, setStripeModal } = useContext(UserContext);
   const searchBarRef = useRef<HTMLDivElement>(null);
-  const [favorites, setFavorites] = useState([]);
   const [user] = useAuthState(auth);
-  const [stripeModal, setStripeModal] = useState(false);
 
   useEffect(() => {
     (async () => {
