@@ -24,7 +24,7 @@ export const StripeModal = ({ setAuthType, setStripeModal }: StripeProps) => {
       <C.Modal>
         <div className="login">
           <p>
-            You exceeded the favorites limit of {limit} pokemons for our {plan}{" "}
+            You exceeded the favorites limit of {limit} pokemons for your {plan}{" "}
             Plan.
           </p>
           <p>

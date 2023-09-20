@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { ReactComponent as LinkedinLogo } from "../../assets/logo-linkedin.svg";
 import { ReactComponent as GithubLogo } from "../../assets/logo-github.svg";
 import { ReactComponent as TelegramLogo } from "../../assets/logo-telegram.svg";
-import { ReactComponent as AvatarLogout } from "../../assets/icon-avatar.svg";
+import { ReactComponent as GearIcon } from "../../assets/gear-icon.svg";
 import { ReactComponent as AvatarLogin } from "../../assets/pokeball.svg";
 import { ReactComponent as Logout } from "../../assets/logout.svg";
 import { ReactComponent as HeartIcon } from "../../assets/icon-heart-black.svg";
@@ -12,7 +12,7 @@ import { auth, logout } from "../../api/firebase/firebase";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   setAuthModal?: (value: boolean) => void;
@@ -22,6 +22,12 @@ type Props = {
 export const SocialMedia = ({ setAuthModal, header }: Props) => {
   const [user] = useAuthState(auth);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [avatar, setAvatar] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    setAvatar(user?.avatar);
+  }, []);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -42,7 +48,11 @@ export const SocialMedia = ({ setAuthModal, header }: Props) => {
             <C.Avatar>
               {user ? (
                 <Button onClick={handleClick}>
-                  <AvatarLogout style={{ width: "3rem" }} />
+                  {avatar ? (
+                    <img src={avatar} alt="avatar" className="avatar" />
+                  ) : (
+                    <AvatarLogin />
+                  )}
                 </Button>
               ) : (
                 <Tooltip title="Login">
@@ -74,6 +84,17 @@ export const SocialMedia = ({ setAuthModal, header }: Props) => {
                 <p>
                   Favorites
                   <HeartIcon />
+                </p>
+              </Link>
+              <Link
+                to="/profile"
+                onClick={() => {
+                  handleClose();
+                }}
+              >
+                <p>
+                  Profile
+                  <GearIcon />
                 </p>
               </Link>
               <p

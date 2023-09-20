@@ -37,6 +37,14 @@ export const Avatar = styled.div`
     width: 2rem;
     height: 2rem;
   }
+
+  .avatar{
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 `;
 
 export const Dropdown = styled.div`
