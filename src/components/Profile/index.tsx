@@ -1,18 +1,29 @@
 import Button from "@mui/material/Button";
 import * as C from "./styles";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { updateProfile } from "../../api/firebase/firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserContext } from "../../context/userContext";
 
 export const Profile = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState<any>("");
-  const [file, setFile] = useState<any>("");
-  const [birthday, setBirthday] = useState("");
-  const [disabled, setDisabled] = useState(false);
-  const [updating, setUpdating] = useState(false);
+  const {
+    name,
+    setName,
+    email,
+    setEmail,
+    avatar,
+    setAvatar,
+    file,
+    setFile,
+    birthday,
+    setBirthday,
+    subscription,
+    setSubsription,
+    setDisabled,
+    updating,
+    setUpdating,
+  } = useContext(UserContext);
 
   const handleChange = async (event: any) => {
     const file = event.target.files[0];
@@ -41,6 +52,7 @@ export const Profile = () => {
     setEmail(user?.email);
     setAvatar(user?.avatar);
     setBirthday(user?.birthday);
+    setSubsription(user?.subscription);
     localStorage.setItem("prevUser", JSON.stringify(user));
   }, []);
 
@@ -66,17 +78,21 @@ export const Profile = () => {
       name,
       avatar,
       birthday,
+      subscription,
     };
     localStorage.setItem("user", JSON.stringify(data));
+    localStorage.setItem("prevUser", JSON.stringify(data));
   };
 
   const cancelChange = () => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("prevUser"));
     setName(user?.name);
     setEmail(user?.email);
     setAvatar(user?.avatar);
     setBirthday(user?.birthday);
   };
+
+  console.log(name);
 
   useEffect(() => {
     const checkForChanges = () => {
@@ -138,7 +154,7 @@ export const Profile = () => {
                         className="form-control"
                         id="fullName"
                         autoComplete="off"
-                        defaultValue={name}
+                        value={name}
                         onChange={(e) => setName(e.target.value)}
                       />
                     </div>
@@ -169,7 +185,6 @@ export const Profile = () => {
                     <div className="row mt-5">
                       <div className="col">
                         <Button
-                          disabled={disabled}
                           variant="outlined"
                           className="save"
                           onClick={() => handleUpdate()}

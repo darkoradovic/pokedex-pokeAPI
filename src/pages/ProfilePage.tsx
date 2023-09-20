@@ -26,7 +26,7 @@ export const ProfilePage = ({ setIsFavoritePage, tabs }: ProfileProps) => {
   };
 
   return (
-    <C.Container className="main-container">
+    <C.Container className="main-container profile-container">
       <div className="tabs">
         <span
           className={activeTab === "Profile" ? "active" : ""}

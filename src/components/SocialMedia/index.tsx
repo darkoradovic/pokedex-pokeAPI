@@ -12,7 +12,8 @@ import { auth, logout } from "../../api/firebase/firebase";
 import Tooltip from "@mui/material/Tooltip";
 import Button from "@mui/material/Button";
 import Popover from "@mui/material/Popover";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../context/userContext";
 
 type Props = {
   setAuthModal?: (value: boolean) => void;
@@ -22,7 +23,7 @@ type Props = {
 export const SocialMedia = ({ setAuthModal, header }: Props) => {
   const [user] = useAuthState(auth);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [avatar, setAvatar] = useState("");
+  const { avatar, setAvatar } = useContext(UserContext);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));

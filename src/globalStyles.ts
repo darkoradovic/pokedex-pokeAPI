@@ -62,6 +62,10 @@ export const GlobalStyles = createGlobalStyle`
     height: calc(100vh - 120px) ;
   }
 
+  .profile-container{
+    min-height: calc(100vh - 108px);
+  }
+
   .button {
     background: linear-gradient(180deg, #151a37 0%, rgba(21, 26, 55, 0) 100%);
     border: 1px solid #24293f;
