@@ -14,7 +14,7 @@ const UserProvider: React.FC<Props> = ({ children }) => {
   const [disabled, setDisabled] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [subscription, setSubsription] = useState(
-    JSON.parse(localStorage.getItem("user")).subscription
+    JSON.parse(localStorage.getItem("user"))?.subscription
   );
   const [stripeModal, setStripeModal] = useState(false);
   return (
