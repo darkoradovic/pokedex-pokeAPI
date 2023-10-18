@@ -51,7 +51,7 @@ export const Register = ({ setAuthType, setModal }: RegisterProps) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
-        <button className="login__btn" onClick={register}>
+        <button className="login__btn" onClick={() => register()}>
           Register
         </button>
 

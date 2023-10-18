@@ -60,10 +60,13 @@ export default function UsePagination(props: UsePaginationProps) {
     onChange: handleChange,
   });
 
+ 
+
   return (
     <nav>
       <C.Pagination>
         {items.map(({ page, type, selected, ...item }, index) => {
+           console.log(page?.toFixed())
           let children = null;
 
           if (type === "start-ellipsis" || type === "end-ellipsis") {
@@ -71,7 +74,7 @@ export default function UsePagination(props: UsePaginationProps) {
           } else if (type === "page") {
             children = (
               <C.Button {...item} selected={selected}>
-                {page}
+                {page?.toFixed()}
               </C.Button>
             );
           } else {
@@ -91,7 +94,7 @@ export default function UsePagination(props: UsePaginationProps) {
             className="input__page__number"
             min="1"
             max={max}
-            defaultValue={props.page}
+            defaultValue={props.page?.toFixed()}
             onChange={(e) => handleChangeValue(e)}
           />
           <C.SearchButton onClick={(e) => handleChange(e, value)}>
