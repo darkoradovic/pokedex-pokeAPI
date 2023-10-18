@@ -66,7 +66,6 @@ export default function UsePagination(props: UsePaginationProps) {
     <nav>
       <C.Pagination>
         {items.map(({ page, type, selected, ...item }, index) => {
-           console.log(page?.toFixed())
           let children = null;
 
           if (type === "start-ellipsis" || type === "end-ellipsis") {

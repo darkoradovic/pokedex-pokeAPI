@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { logInWithEmailAndPassword } from "../../api/firebase/firebase";
+import { logInWithEmailAndPassword, sendPasswordReset } from "../../api/firebase/firebase";
 
 type LoginProps = {
   setAuthType: (value: string) => void;
@@ -8,6 +8,11 @@ type LoginProps = {
 
 export const ForgotPassword = ({ setAuthType, setModal }: LoginProps) => {
   const [email, setEmail] = useState("");
+
+  const reset = () => {
+    if (!email) alert("Error");
+    sendPasswordReset(email, setModal);
+  };
 
   return (
     <div className="login">
@@ -19,8 +24,8 @@ export const ForgotPassword = ({ setAuthType, setModal }: LoginProps) => {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="E-mail Address"
         />
-        <button className="login__btn" onClick={() =>{}}>
-          Login
+        <button className="login__btn" onClick={() => reset()}>
+          Reset password
         </button>
       </div>
     </div>
