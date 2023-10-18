@@ -37,4 +37,5 @@ This Pokédex was made in ReactJS + TypeScript. Initially, the application's boi
 
 ## 📊 Project status
 
-✅ Finish (addiing new features)
+✅ Stage 1:  Finished
+💻 Stage 2: adding new features
