@@ -39,6 +39,15 @@ export const Container = styled.div`
     }
   }
 
+  .no_pokemons{
+    height: calc(100vh - 310px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 32px;
+  }
+
 `;
 
 export const Filters = styled.div`

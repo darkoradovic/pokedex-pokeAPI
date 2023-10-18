@@ -96,12 +96,13 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
         email,
         subscription: !subscription ? 'free' : subscription,
         limit: 20,
-        pokemonFavorites: []
+        pokemonFavorites: [],
+        avatar: '',
+        birthday: ''
       });
       setModal(false);
     } catch (error: any) {
       if(error.message === "Firebase: Error (auth/email-already-in-use).") {
-        
         setError("Email already in use")
     }
     }
@@ -120,6 +121,7 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     signOut(auth);
     window.location.href = '/'
     localStorage.removeItem('user')
+    localStorage.removeItem('prevUser')
   };
 
   const getFavorites = async(email: string, setFavorites?: (value: []) => void)=>{

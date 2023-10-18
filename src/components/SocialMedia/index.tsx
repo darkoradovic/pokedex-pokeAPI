@@ -25,11 +25,6 @@ export const SocialMedia = ({ setAuthModal, header }: Props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const { avatar, setAvatar } = useContext(UserContext);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setAvatar(user?.avatar);
-  }, []);
-
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };

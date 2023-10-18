@@ -7,6 +7,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { PokemonModal } from "../components/PokemonModal";
 import Button from "@mui/material/Button";
 import { PokemonContext } from "../context/pokemonContext";
+import { Link, redirect } from "react-router-dom";
 
 type Favorite = {
   isFavoritePage: boolean;
@@ -51,11 +52,13 @@ export const FavoritesPage = ({
     }
   }, [user]);
 
+  console.log(favorites)
+
   return (
     <C.Container>
       <h1 className="favorite__title">My pokemons</h1>
-      <C.Filters className="main-container">
-        <p>Sort by:</p>
+     
+       {favorites?.length === 0 ? <div className="no_pokemons"><p>Add pokemons to your list</p>  <Button><Link to='/'>Add</Link></Button></div> : <><C.Filters className="main-container"> <p>Sort by:</p>
         <Button
           onClick={() => setActiveSort("date")}
           title="Date added"
@@ -80,7 +83,7 @@ export const FavoritesPage = ({
         isFavoritePage={isFavoritePage}
         setFavorites={setFavorites}
         favorites={favorites}
-      />
+      /></>}
       {pokemonData && modal && (
         <PokemonModal setModal={setModal} pokemonData={pokemonData} />
       )}

@@ -8,7 +8,9 @@ interface Props {
 const UserProvider: React.FC<Props> = ({ children }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState<any>("");
+  const [avatar, setAvatar] = useState<any>(
+    JSON.parse(localStorage.getItem("user"))?.avatar
+  );
   const [file, setFile] = useState<any>("");
   const [birthday, setBirthday] = useState("");
   const [disabled, setDisabled] = useState(false);
