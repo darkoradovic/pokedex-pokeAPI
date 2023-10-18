@@ -53,7 +53,7 @@ export const Login = ({ setAuthType, setModal }: LoginProps) => {
           Login with Google
         </button> */}
         <div>
-          <button className="forgot_password">Forgot Password?</button>
+          <button className="forgot_password" onClick={() => setAuthType("forgotPassword")}>Forgot Password?</button>
         </div>
         <div className="register__switch">
           <p>Don't have an account?</p>

@@ -2,6 +2,7 @@ import * as C from "./styles";
 import { Login } from "./Login";
 import { useState } from "react";
 import { Register } from "./Register";
+import { ForgotPassword } from "./ForgotPassword";
 
 type PokemonModalProps = {
   setModal?: (value: boolean) => void;
@@ -21,6 +22,8 @@ export const AuthModal = ({ setModal }: PokemonModalProps) => {
           <Login setAuthType={setAuthType} setModal={setModal} />
         ) : authType === "register" ? (
           <Register setAuthType={setAuthType} setModal={setModal} />
+        ) : authType === "forgotPassword" ? (
+          <ForgotPassword setAuthType={setAuthType} setModal={setModal} />
         ) : (
           <Login setAuthType={setAuthType} setModal={setModal} />
         )}

@@ -108,10 +108,11 @@ if(error.message === 'Firebase: Access to this account has been temporarily disa
     }
   };
 
-  const sendPasswordReset = async (email: string) => {
+  const sendPasswordReset = async (email: string, setModal: (value: boolean) => void) => {
     try {
       await sendPasswordResetEmail(auth, email);
-      alert("Password reset link sent!");
+      setModal(false)
+      alert("Password reset link sent! Please check your email.");
     } catch (err) {
       console.error(err);
     }
