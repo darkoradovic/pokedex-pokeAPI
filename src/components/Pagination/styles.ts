@@ -1,21 +1,10 @@
 import styled from "styled-components";
 
-export const Pagination = styled.ul`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
- 
-
-  li:first-child {
-    margin-right: 1rem;
-  }
-
-  li:last-child {
-    margin-left: 1rem;
-  }
-
-  .page__search{
+export const PaginationNav = styled.nav`
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+ .page__search{
     display: flex;
     height: 40px;
 
@@ -35,7 +24,26 @@ export const Pagination = styled.ul`
   }
   }
 
+  @media (max-width: 38.125rem) {
+    flex-direction: column;
+    align-items: center;
+  }
+`
+
+export const Pagination = styled.ul`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
  
+
+  li:first-child {
+    margin-right: 1rem;
+  }
+
+  li:last-child {
+    margin-left: 1rem;
+  } 
 `;
 
 export const Button = styled.button<{

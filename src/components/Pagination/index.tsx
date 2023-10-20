@@ -63,7 +63,7 @@ export default function UsePagination(props: UsePaginationProps) {
  
 
   return (
-    <nav>
+    <C.PaginationNav>
       <C.Pagination>
         {items.map(({ page, type, selected, ...item }, index) => {
           let children = null;
@@ -86,7 +86,9 @@ export default function UsePagination(props: UsePaginationProps) {
 
           return <li key={index}>{children}</li>;
         })}
-        <div className="page__search">
+        
+      </C.Pagination>
+      <div className="page__search">
           <input
             ref={ref}
             type="number"
@@ -100,7 +102,6 @@ export default function UsePagination(props: UsePaginationProps) {
             <SearchIcon />
           </C.SearchButton>
         </div>
-      </C.Pagination>
-    </nav>
+    </C.PaginationNav>
   );
 }
